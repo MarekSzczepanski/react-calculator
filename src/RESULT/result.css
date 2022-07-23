@@ -1,0 +1,12 @@
+.result {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 33vw;
+    height: 8.5vw;
+    padding-right: 2%;
+    border: solid 1px #000;
+    border-bottom: 0;
+    font-size: 2vw;
+    font-weight: 600;
+}
