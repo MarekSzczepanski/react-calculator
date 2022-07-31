@@ -1,7 +1,8 @@
 import BUTTON from './BUTTON/BUTTON';
 import './buttons.css';
 
-function BUTTONS() {
+function BUTTONS({button_being_pressed, press_button}) {
+
   const button_names = [
     {name: 7, row: 0},
     {name: 8, row: 0},
@@ -24,10 +25,9 @@ function BUTTONS() {
   return (
     <div className='calculator-buttons-container'>
       {button_names.map((button, i) => {
-        return <BUTTON name={button_names[i].name} row={button_names[i].row} action={i > 10 ? button_names[i] : null} key={i}></BUTTON>  
+        return <BUTTON name={button_names[i].name} row={button_names[i].row} action={i > 10 ? button_names[i] : null} is_being_pressed={button_being_pressed.textContent == button_names[i].name ? true : false} press_button={press_button} key={i}></BUTTON>  
       })}
     </div>
-    
   );
 }
   

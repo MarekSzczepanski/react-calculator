@@ -1,8 +1,8 @@
 import './button.css';
 
-function BUTTON({name, row, action}) {
+function BUTTON({name, row, action, is_being_pressed, press_button}) {
   return (
-    <div className={'calculator-button row' + row} data-action={action}>{name}</div>
+    <div className={is_being_pressed ? 'calculator-button row' + row + ' active' : 'calculator-button row' + row} data-action={action} onClick={press_button}>{name}</div>
   );
 }
   

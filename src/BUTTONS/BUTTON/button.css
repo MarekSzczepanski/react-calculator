@@ -9,7 +9,9 @@
     cursor: pointer;
 } .calculator-button:hover {
     background-color: #ccffcc;
-} .calculator-button.row0 {
+} .calculator-button.active {
+    background-color: #56fc56;
+}.calculator-button.row0 {
     border-top: 0;
     border-bottom: 1px;
     border-left: 0;
