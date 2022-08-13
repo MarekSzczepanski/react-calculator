@@ -1,8 +1,8 @@
 import './result.css';
 
-function RESULT() {
+function RESULT({value_to_display}) {
   return (
-    <div className='result'>0</div>
+    <div className='result'>{value_to_display}</div>
   );
 }
   
