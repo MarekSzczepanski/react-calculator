@@ -77,6 +77,7 @@ const App = () => {
         type: 'display', 
         value: display_value(button_being_pressed)
       });
+      set_button_being_pressed(null);
     }
 
     const do_operation = () => {
