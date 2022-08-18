@@ -3,11 +3,17 @@ import BUTTONS from './BUTTONS/BUTTONS';
 import RESULT from './RESULT/RESULT';
 import React, { useEffect, useReducer } from 'react';
 
+const PRESS = 'press';
+const ANIMATE = 'animate';
+const DISPLAY = 'display';
+const OPERATION = 'operation';
+const COUNT = 'count';
+
 const press_button_reducer = (state, action) => {
   switch (action.type) {
-    case 'press':
+    case PRESS:
       return {...state, button_being_pressed: action.value};
-    case 'animate':
+    case ANIMATE:
       return {...state, button_being_animated: action.value};
     default:
       return state;
@@ -16,11 +22,11 @@ const press_button_reducer = (state, action) => {
 
 const calculation_reducer = (state, action) => {
   switch (action.type) {
-    case 'display':
+    case DISPLAY:
       return {...state, value_to_display: action.value ? action.value : state.value_to_display};
-    case 'operation':
+    case OPERATION:
       return {...state, current_operation: action.value};
-    case 'count':
+    case COUNT:
       return {...state, value_to_count: action.value};
     default:
       return state;
@@ -56,8 +62,8 @@ const App = () => {
 
       if (was_number_or_dot_pressed_after_pressing_operation) {
         const clear_display_and_return_new_number_to_display = () => {
-          calculation_dispatch({type: 'count', value: calculation_state.value_to_count + calculation_state.current_operation});
-          calculation_dispatch({type: 'operation', value: null});
+          calculation_dispatch({type: COUNT, value: calculation_state.value_to_count + calculation_state.current_operation});
+          calculation_dispatch({type: OPERATION, value: null});
           return press_button_state.button_being_pressed;
         }
         return clear_display_and_return_new_number_to_display();
@@ -75,10 +81,10 @@ const App = () => {
 
     const change_display_value = () => {
       calculation_dispatch({
-        type: 'display', 
+        type: DISPLAY, 
         value: display_value(press_button_state.button_being_pressed)
       });
-      press_button_dispatch({type: 'animate', value: null});
+      press_button_dispatch({type: ANIMATE, value: null});
     }
 
     const do_operation = () => {
@@ -92,8 +98,8 @@ const App = () => {
           let value_to_display;
   
           const dispatches = (value) => {
-            calculation_dispatch({type: 'count', value});
-            calculation_dispatch({type: 'display', value});
+            calculation_dispatch({type: COUNT, value});
+            calculation_dispatch({type: DISPLAY, value});
           }
 
           switch(operation) {
@@ -119,11 +125,11 @@ const App = () => {
         calculate_before_displaying_new_value();
       } else {
         const remember_value_displayed_before_operation = () => {
-          calculation_dispatch({type: 'count', value: Number(calculation_state.value_to_display)});
+          calculation_dispatch({type: COUNT, value: Number(calculation_state.value_to_display)});
         }
         remember_value_displayed_before_operation();
       }
-      calculation_dispatch({type: 'operation', value: press_button_state.button_being_pressed});
+      calculation_dispatch({type: OPERATION, value: press_button_state.button_being_pressed});
     }
 
     if (was_number_or_dot_or_equals_pressed) {
@@ -132,12 +138,12 @@ const App = () => {
       do_operation();
     }
     
-    press_button_dispatch({type: 'animate', value: press_button_state.button_being_pressed});
-    setTimeout(() => {press_button_dispatch({type: 'animate', value: null});}, 200);
+    press_button_dispatch({type: ANIMATE, value: press_button_state.button_being_pressed});
+    setTimeout(() => {press_button_dispatch({type: ANIMATE, value: null});}, 200);
   }, [press_button_state.button_being_pressed]);
 
   const handle_press_button = (e) => {
-    press_button_dispatch({type: 'press', value: e.target.textContent});
+    press_button_dispatch({type: PRESS, value: e.target.textContent});
   }
 
   return (
