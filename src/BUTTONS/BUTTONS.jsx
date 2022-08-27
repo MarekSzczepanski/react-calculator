@@ -20,6 +20,7 @@ function BUTTONS({button_being_animated, press_button}) {
     {name: 0, row: 3},
     {name: '.', row: 3},
     {name: '=', row: 3},
+    {name: 'C', row: -1},
   ];
 
   return (

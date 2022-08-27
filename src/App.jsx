@@ -8,6 +8,7 @@ const ANIMATE = 'animate';
 const DISPLAY = 'display';
 const OPERATION = 'operation';
 const COUNT = 'count';
+const CLEAR = 'clear';
 
 const press_button_reducer = (state, action) => {
   switch (action.type) {
@@ -28,6 +29,8 @@ const calculation_reducer = (state, action) => {
       return {...state, current_operation: action.value};
     case COUNT:
       return {...state, value_to_count: action.value};
+    case CLEAR:
+      return {...state, value_to_display: 0, value_to_count: null};
     default:
       return state;
   }
@@ -143,6 +146,8 @@ const App = () => {
   }, [press_button_state.button_being_pressed]);
 
   const handle_press_button = (e) => {
+    if (e.target.textContent === 'C') return calculation_dispatch({type: CLEAR});
+
     press_button_dispatch({type: PRESS, value: e.target.textContent});
   }
 
