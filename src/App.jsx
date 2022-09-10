@@ -9,7 +9,7 @@ const DISPLAY = 'display';
 const OPERATION = 'operation';
 const COUNT = 'count';
 const CLEAR = 'clear';
-const IS_RESULT = 'result';
+const IS_RESULT_DISPLAYED = 'result';
 
 const press_button_reducer = (state, action) => {
   switch (action.type) {
@@ -32,7 +32,7 @@ const calculation_reducer = (state, action) => {
       return {...state, value_to_count: action.value};
     case CLEAR:
       return {value_to_display: 0, current_operation: null, value_to_count: null};
-    case IS_RESULT:
+    case IS_RESULT_DISPLAYED:
       return {...state, is_result_displayed: action.value};
     default:
       return state;
@@ -50,10 +50,6 @@ const App = () => {
     value_to_count: null,
     is_result_displayed: false,
   })
-
-  useEffect(() => {
-    console.log(calculation_state)
-  }, [calculation_state])
 
   useEffect(() => {
     const was_number_or_dot_or_equals_pressed = 
@@ -80,7 +76,7 @@ const App = () => {
               calculation_dispatch({type: COUNT, value: String(calculation_state.value_to_count)});
             }
             const mark_current_display_as_result_to_allow_modyfing_result_and_using_it_as_next_first_number = () => {
-              calculation_dispatch({type: IS_RESULT, value: true});
+              calculation_dispatch({type: IS_RESULT_DISPLAYED, value: true});
             }
 
             prepare_first_number_to_merge_with_operation_type();
@@ -107,7 +103,6 @@ const App = () => {
         type: DISPLAY, 
         value: display_value(pressed_button)
       });
-      //press_button_dispatch({type: ANIMATE, value: null});
     }
 
     const do_operation = () => {
@@ -120,7 +115,7 @@ const App = () => {
           let operation;
           let past_display_value; 
           let value_to_display;
-          console.log(calculation_state.value_to_count)
+
           if (was_operation_pressed_after_operation) {
             operation = calculation_state.value_to_count.slice(calculation_state.value_to_count.length - 1);
             past_display_value = Number(calculation_state.value_to_count.slice(0, -1));
@@ -170,12 +165,12 @@ const App = () => {
       }
       calculation_dispatch({type: OPERATION, value: press_button_state.button_being_pressed});
     }
-    console.log(1, calculation_state.current_operation)
+
     if (was_number_or_dot_or_equals_pressed || calculation_state.current_operation === '=') {
       if (calculation_state.is_result_displayed) {
         const allow_modyfing_result_and_using_it_as_next_first_number = () => {
           calculation_dispatch({type: COUNT, value: null});
-          calculation_dispatch({type: IS_RESULT, value: false});
+          calculation_dispatch({type: IS_RESULT_DISPLAYED, value: false});
         }
         allow_modyfing_result_and_using_it_as_next_first_number();
       }
@@ -185,18 +180,29 @@ const App = () => {
       do_operation();
     }
     
-    press_button_dispatch({type: ANIMATE, value: press_button_state.button_being_pressed});
-    setTimeout(() => {
-      press_button_dispatch({type: ANIMATE, value: null});
-    }, 200);
+    if (press_button_state.button_being_pressed) {
+      animate_button_press(press_button_state.button_being_pressed);
+    } 
+    
     press_button_dispatch({type: PRESS, value: null});
   }, [press_button_state.button_being_pressed]);
 
   const handle_press_button = (e) => {
-    const was_clear_pressed = e.target.textContent === 'C';
-    if (was_clear_pressed) return calculation_dispatch({type: CLEAR});
-    if (calculation_state.value_to_display === "you can't divide by 0") calculation_dispatch({type: CLEAR});
-    press_button_dispatch({type: PRESS, value: e.target.textContent});
+    const pressed_button_text = e.target.textContent;
+    const was_clear_pressed = pressed_button_text === 'C';
+    
+    if (was_clear_pressed) {
+      animate_button_press(pressed_button_text);
+      return calculation_dispatch({type: CLEAR});
+    } if (calculation_state.value_to_display === "you can't divide by 0") calculation_dispatch({type: CLEAR});
+    press_button_dispatch({type: PRESS, value:pressed_button_text});
+  }
+
+  const animate_button_press = (button) => {
+    press_button_dispatch({type: ANIMATE, value: button});
+    setTimeout(() => {
+      press_button_dispatch({type: ANIMATE, value: null});
+    }, 200);
   }
 
   return (
