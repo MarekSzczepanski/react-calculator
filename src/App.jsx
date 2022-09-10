@@ -110,16 +110,14 @@ const App = () => {
       if (first_two_inputed_numbers_were_calculated_and_next_number_will_be_inputed) {
         const calculate_before_displaying_new_value = () => {
           const is_second_number_only_dot = calculation_state.value_to_display === '.'
-          const was_operation_pressed_after_operation = typeof calculation_state.value_to_count === 'string'
-          let present_display_value = Number(calculation_state.value_to_display);
-          let operation;
-          let past_display_value; 
-          let value_to_display;
+          const was_operation_pressed_after_operation = typeof calculation_state.value_to_count === 'number'
 
-          if (was_operation_pressed_after_operation) {
-            operation = calculation_state.value_to_count.slice(calculation_state.value_to_count.length - 1);
-            past_display_value = Number(calculation_state.value_to_count.slice(0, -1));
-          } 
+          if (was_operation_pressed_after_operation) return;
+
+          const operation = calculation_state.value_to_count.slice(calculation_state.value_to_count.length - 1);
+          const past_display_value = Number(calculation_state.value_to_count.slice(0, -1));
+          let present_display_value = Number(calculation_state.value_to_display);
+          let value_to_display;
 
           if (is_second_number_only_dot) {
             present_display_value = 0;
