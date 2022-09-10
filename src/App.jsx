@@ -195,6 +195,7 @@ const App = () => {
   const handle_press_button = (e) => {
     const was_clear_pressed = e.target.textContent === 'C';
     if (was_clear_pressed) return calculation_dispatch({type: CLEAR});
+    if (calculation_state.value_to_display === "you can't divide by 0") calculation_dispatch({type: CLEAR});
     press_button_dispatch({type: PRESS, value: e.target.textContent});
   }
 
